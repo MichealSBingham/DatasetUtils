@@ -230,6 +230,7 @@ luisa.chemistry = 6
 luisa.sex = 7
 luisa.love = 5
 luisa.harmony = 3
+luisa.gender = 'F'
 luisa.relationship_type = 'FLING' 
 
 
@@ -266,8 +267,9 @@ FLING: Fling,
 P: Partner, 
 S: Soulmate
 
+Gender is male (M) or female (F) or other (O). 
 
-`GENDER = ['M', 'F']` 
+`GENDER = ['M', 'F', 'O']` 
 
 Zodiac signs and aspects are case sensitive so type exactly 
 
