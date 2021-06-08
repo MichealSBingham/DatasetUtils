@@ -12,6 +12,7 @@ class Person:
 # birthday - DateTime Object representing birthday OR you can enter a string 'YYYY/MM/DD' and it'll convert to DateTime
 # birthplace [optional*]: except in the cases where the person was born outside of the US, we automatically use nyc for the birthplace. This is because for our calculations the birthplace won't cause too much of a difference unless they are outside of the country
 #In the case, adjust accordingly below because I have not added functionality to this yet 
+# gender - String . "M" or 'F'
 # sun - String. One of 12 of the zodiac signs
 # moon ..
 # ...
@@ -19,7 +20,7 @@ class Person:
 #def_love: List of strings. Words the person used to define love. 
 #ideal_lover: List of strings. Words the person used to describe their ideal lover
 #Lovers: List of Lover objects. Prior romantic encounters 
-	def __init__(self, name, *, birthday=None, birthplace='nyc', 
+	def __init__(self, name, *, birthday=None, birthplace='nyc', gender=None,
 				 sun=None, moon=None, mercury=None, venus=None, mars=None, 
 				 def_love=None, ideal_lover=None, lovers=[]):
 
@@ -35,6 +36,7 @@ class Person:
 		else: #make datetime object 
 			self.birthday = Datetime(birthday)
 		self.birthplace = birthplace
+		self.gender = gender
 
 		sign = getPlanets(self.birthday, birthplace)
 

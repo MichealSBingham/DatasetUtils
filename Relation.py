@@ -30,6 +30,19 @@ class Relation():
 		self.def_love = person.def_love
 		self.ideal_lover = person.ideal_lover
 
+	"""
+	Class method 
+	- returns all of the relation objects of a particular person in a list 
+
+	"""
+	def __create_relations__(person):
+		relations = []
+		for lover in person.lovers:
+			relation = Relation(person, lover)
+			relations.append(relation)
+
+		return relations
+
 
 
 
