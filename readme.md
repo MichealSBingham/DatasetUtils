@@ -42,6 +42,8 @@ Gracen and Valerie are `Lover` objects.
  
  
  
+ 
+ 
 
 ###### Creating a `Person` (Instantiating)  
 
@@ -177,3 +179,92 @@ You will **only need** to write to these if you do not have the person's birthda
 
 ```
 
+
+### `Full Example `
+
+
+Suppose we have a data entry row as follows. Note that a `Person` can have many `Lover`s and these `Lover`s 
+
+
+| Birthday   | Name    | Email            | Phone      | Gender | Ideal Lover?                                                                                                                                                                      | What is love?                                                                                               | Previous Partner | When is their birthday? | How attractive were they? | How would you rate the chemistry? | How was the sex? | How much love between you two? | How long did it last? | Harmony | Relationship category? | Another person to add?  | Past partner is a ..? | Current partner? | Previous Partner Name | Their birthday? | Sun         | Moon   | Mercury   | Mars      | Venus     | Relationship Category | How long did it last? | Attraction | Sex | Love | Chemistry | Harmony |
+|------------|---------|------------------|------------|--------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------|------------------|-------------------------|---------------------------|-----------------------------------|------------------|--------------------------------|-----------------------|---------|------------------------|-------------------------|-----------------------|------------------|-----------------------|-----------------|-------------|--------|-----------|-----------|-----------|-----------------------|-----------------------|------------|-----|------|-----------|---------|
+| 1999/07/21 | Micheal | micheal@xiris.ai | 8888888888 | M      | sensitive,  beautiful,  kind,  loving, empathetic,  nurturing,  fierce,  brave,  extroverted,  social,  seductive, passionate,  deep,  intuitive,  romantic,  committed,  devoted | forever,  sacrifice,  caring,  empathy,  attachment,  unconditional,  understanding,  consuming,  addicting | Luisa            | 08/01/1999              | 5                         | 6                                 | 7                | 5                              | 4                     | 3       | FLING                  | Yes                     | F                     | No               | Gracen                |                 | Sagittarius | Taurus | Capricorn | Capricorn | Capricorn | PARTNER               | 4                     | 10         | 8   | 9    | 10        | 1       |
+
+
+
+You will read in the data, 
+create a `Person`, 
+assign the attributes to the `Person` (Gender, ideal lover, definition of love, etc) 
+create the `Lovers` 
+assign the `Lovers` to the `Person` 
+create a `Relation` for each `Person` and `Lover` 
+
+
+```
+
+from chart import * 
+from Person import Person 
+from Lover import Lover
+from Relation import Relation
+
+# Creating a Person 
+
+micheal = Person('Micheal Bingham', birthday='1999/07/21') 
+micheal.gender = 'M' 
+micheal.def_love = [forever, sacrifice, caring, empathy, attachment, unconditional, understanding, consuming, addicting]
+micheal.ideal_lover = [sensitive, beautiful, kind, loving, empathetic, nurturing, fierce, brave, extroverted, social, seductive, passionate, deep, intuitive, romantic, committed, devoted]
+
+#Creating a Lover
+luisa = Lover('Luisa', birthday='2000/08/21') 
+luisa.isCurrent = False 
+luisa.duration = 4 
+luisa.attractiveness = 5
+luisa.chemistry = 6
+luisa.sex = 7
+luisa.love = 5
+luisa.harmony = 3
+luisa.relationship_type = 'FLING' 
+
+
+# Adding Lover to a Person 
+micheal.add_lover(luisa) 
+
+
+
+#Creating another Lover 
+gracen = Lover('Gracen', sun='Sagittarius', moon='Taurus', mercury='Capricorn', venus='Capricorn', mars='Capricorn') # Her birthday wasn't given to (column was blank) So we had to instantiate the Lover object with her birth chart (moon,mercury, etc..) 
+gracen.isCurrent = False 
+
+#... rest of the attributes ... (duration, attractiveness, chemistry, etc..)
+
+# Adding Gracen as also a lover to Micheal 
+micheal.add_lover(gracen)
+
+
+
+
+
+```
+
+
+
+## Important Constants  
+
+Use the following string values for the `relationship_type` attribute. 
+`RELATIONSHIP_TYPES = ['BOF', 'FWB', 'FLING', 'P', 'S']`
+
+BOF: better off friends, 
+FWB: Friends with benefits, 
+FLING: Fling, 
+P: Partner, 
+S: Soulmate
+
+
+`GENDER = ['M', 'F']` 
+
+Zodiac signs and aspects are case sensitive so type exactly 
+
+```
+SIGNS = ['Aries', 'Taurus', 'Gemini', 'Cancer', 'Leo', 'Virgo', 'Libra', 'Scorpio', 'Sagittarius', 'Capricorn', 'Aquarius', 'Pisces']
+ASPECTS = ['Square', 'Conjunct', 'Semisextile', 'Sextile', 'Trine', 'Quincunx', 'Opposition']
+```
