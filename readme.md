@@ -81,7 +81,7 @@ _Note_
 					ex: `date = Datetime('1999/07/21')`. May be (or may not be) easier to deal with Datetime module since you'll be reading it from a spreadsheet and I know sometimes they have a weird way of formatting dates 
 
 
-The only time you would do this this way is if a `Person` (or a `Lover`) does not have it's birthday available but has the birthchart.
+The only time you would do this this way is if a `Person` (or a `Lover`) does not have its birthday available but has the birthchart.
 There will be a column in each row that has an entry for either the birthday or the full birth chart so there won't be any issues there
 
 
@@ -151,7 +151,7 @@ You will **only need** to write to these if you do not have the person's birthda
 ```
  gracen.duration = 1 # Months the relationship between Gracen and gracen.person (Micheal) lasted 
  gracen.isCurrent = False #boolean of whether or not this is a current partner ornot
- gracen.attractivness = 10 #gracen.partner's (Micheal's) attractiveness rating of gracen. Similarly as follows for chemistry, sex, and love
+ gracen.attractiveness = 10 #gracen.partner's (Micheal's) attractiveness rating of gracen. Similarly as follows for chemistry, sex, and love
  gracen.chemistry = 9
  gracen.sex = 8 
  gracen.love = 6
