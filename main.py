@@ -25,26 +25,22 @@ def main():
             gender = row[4]
             def_love = row[5]
             ideal_lover = row[16]
-#            print(bday)
+
             isCorrect = string_check(def_love)
             if isCorrect == False:
                 def_love = None
             else:
                 def_love = def_love.split(",")
 
-#            print(def_love)
             isCorrect = string_check(ideal_lover)
             if isCorrect == False:
                 ideal_lover = None
             else:
                 ideal_lover = ideal_lover.split(",")
-            print(ideal_lover)
-            #ideal_lover
-            #check format of
 
             p = Person(name, birthday=bday, gender=gender, def_love=def_love,
                        ideal_lover=ideal_lover)  # make person object based on data
-
+            #still need to add lovers
             pList.append(p)
         else:
             firstLine = False
