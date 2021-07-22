@@ -116,7 +116,7 @@ def birthdayForm(birthday):
     year = birthday[0:4]
     month = birthday[5:7]
     day = birthday[8:10]
-    birthday = month + "/" + day + "/" + year
+    birthday = f"{month}/{day}/{year}"
     return birthday
 if __name__ == "__main__":
     main()

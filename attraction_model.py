@@ -57,7 +57,7 @@ def retrievePixels(path):
     img = image.load_img(path, grayscale=False, target_size=(224, 224))
     x = image.img_to_array(img).reshape(1, -1)[0]
     return x
- 
+
 df['exact_file'] = "CFD_Version_203/CFD_203_Images/"+df["folder"]+"/"+df['file']
 df['pixels'] = df['exact_file'].apply(retrievePixels)
 

@@ -1,0 +1,8 @@
+# macOS hidden file
+**/.DS_Store
+
+# Python's cache
+**/__pycache__
+
+# responses.tsv
+responses.tsv
