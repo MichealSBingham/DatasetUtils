@@ -18,22 +18,46 @@ This includes data processing, building the model, and training, testing, valida
 Also need to get the database through a request: https://www.chicagofaces.org/download/
 ''' 
 
+class Attraction: # TODO: OOP.
+    def __init__(self):
+        self.target = 'Attractive'
+        self.pd.options.display.max_columns = 1000
+        self.pd.options.display.max_rows = 1000
+        self.pd.options.display.max_seq_items = 1000
+        # self.cfd_df_raw = pd.read_csv("CFD_Version_203/metadata.csv").head()
+        self.cfd_df_raw = pd.read_csv(os.path.join("CFD_Version_203", "metadata.csv")).head()
+
+    def getFileNames(self):
+        files = []
+        file_count = 0
+        # path = "CFD_Version_203/CFD_203_Images/%s/" % (self.target)
+        path = os.path.join("CFD_Version_203", "CFD_203_Images", self.target)
+        for r, d, f in os.walk(path):
+            for file in f: #BF-001 has several images
+                # if ('.jpg' in file) or ('.jpeg' in file) or ('.png' in file):
+                if file.endswith(('.jpg', '.jpeg', '.png')):
+                    files.append(file)
+        return files
+
+
 
 target = 'Attractive'
 pd.options.display.max_columns = 1000
 pd.options.display.max_rows = 1000
 pd.options.display.max_seq_items = 1000
-cfd_df_raw = pd.read_csv("CFD_Version_203/metadata.csv")
-
+# cfd_df_raw = pd.read_csv("CFD_Version_203/metadata.csv")
+cfd_df_raw = pd.read_csv(os.path.join("CFD_Version_203", "metadata.csv"))
 cfd_df_raw.head()
 
 def getFileNames(target):
     files = []
     file_count = 0
-    path = "CFD_Version_203/CFD_203_Images/%s/" % (target)
+    #     path = "CFD_Version_203/CFD_203_Images/%s/" % (target)
+    path = os.path.join("CFD_Version_203", "CFD_203_Images", "%s") % (target)
     for r, d, f in os.walk(path):
         for file in f: #BF-001 has several images
-            if ('.jpg' in file) or ('.jpeg' in file) or '.png' in file:
+            # if ('.jpg' in file) or ('.jpeg' in file) or ('.png' in file):
+            if file.endswith(('.jpg', '.jpeg', '.png')):
                 files.append(file)
     return files
 
@@ -53,12 +77,15 @@ for index, instance in cfd_df_raw.iterrows():
         cfd_instances.append(tmp_instance)
 df = pd.DataFrame(cfd_instances, columns = ["folder", "file", "score"])
 df[['file', 'score']].head()
+
+
 def retrievePixels(path):
     img = image.load_img(path, grayscale=False, target_size=(224, 224))
     x = image.img_to_array(img).reshape(1, -1)[0]
     return x
 
-df['exact_file'] = "CFD_Version_203/CFD_203_Images/"+df["folder"]+"/"+df['file']
+# df['exact_file'] = "CFD_Version_203/CFD_203_Images/"+df["folder"]+"/"+df['file']
+df['exact_file'] = os.path.join("CFD_Version_203", "CFD_203_Images", df["folder"], df['file'])
 df['pixels'] = df['exact_file'].apply(retrievePixels)
 
 
@@ -88,7 +115,8 @@ df['gender'] = df.file.apply(findGender)
 #include neutral, happen open mouth and happy close mouth
 df = df[(df.emotion == 'N') | (df.emotion == 'HO') | (df.emotion == 'HC')]
 
-df['file'] = "CFD_Version_203/CFD_203_Images/"+df["folder"]+"/"+df['file']
+# df['file'] = "CFD_Version_203/CFD_203_Images/"+df["folder"]+"/"+df['file']
+df['file'] = os.path.join("CFD_Version_203", "CFD_203_Images", df["folder"], df['file'])
 
 
 
@@ -147,13 +175,13 @@ base_model.add(Convolution2D(64, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(64, (3, 3), activation='relu'))
 base_model.add(MaxPooling2D((2,2), strides=(2,2)))
- 
+
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(128, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(128, (3, 3), activation='relu'))
 base_model.add(MaxPooling2D((2,2), strides=(2,2)))
- 
+
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(256, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
@@ -161,7 +189,7 @@ base_model.add(Convolution2D(256, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(256, (3, 3), activation='relu'))
 base_model.add(MaxPooling2D((2,2), strides=(2,2)))
- 
+
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(512, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
@@ -169,7 +197,7 @@ base_model.add(Convolution2D(512, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(512, (3, 3), activation='relu'))
 base_model.add(MaxPooling2D((2,2), strides=(2,2)))
- 
+
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(512, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
@@ -177,7 +205,7 @@ base_model.add(Convolution2D(512, (3, 3), activation='relu'))
 base_model.add(ZeroPadding2D((1,1)))
 base_model.add(Convolution2D(512, (3, 3), activation='relu'))
 base_model.add(MaxPooling2D((2,2), strides=(2,2)))
- 
+
 base_model.add(Convolution2D(4096, (7, 7), activation='relu'))
 base_model.add(Dropout(0.5))
 base_model.add(Convolution2D(4096, (1, 1), activation='relu'))
