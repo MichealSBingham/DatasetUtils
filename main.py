@@ -77,8 +77,11 @@ class Model:
         
         tsv_file = open(tsv)
         read_tsv = csv.reader(tsv_file, delimiter="\t")
+
         pList = []
+
         firstLine = True
+
         for row in read_tsv:
             if firstLine == False:
                 bday = str(row[1])  # accessing bday from .tsv
@@ -88,23 +91,26 @@ class Model:
                 ideal_lover = row[7]
                 bday = birthday_form(bday)
                 
-                isCorrect = string_check(def_love) #check format of thei what is love answer
-                if isCorrect == False:
-                    def_love = None
-                else:
-                    def_love = def_love.split(",")
+                # isCorrect = string_check(def_love) #check format of thei what is love answer
+                # if isCorrect == False:
+                #     def_love = None
+                # else:
+                #     def_love = def_love.split(",")
+                def_love = def_love.split(", ") if string_check(def_love) else None
 
-                isCorrect = string_check(ideal_lover)
-                if isCorrect == False:
-                    ideal_lover = None
-                else:
-                    ideal_lover = ideal_lover.split(",")
+                # isCorrect = string_check(ideal_lover)
+                # if isCorrect == False:
+                #     ideal_lover = None
+                # else:
+                #     ideal_lover = ideal_lover.split(",")
+                ideal_lover = ideal_lover.split(", ") if string_check(ideal_lover) else None
 
                 p = Person(name, birthday=bday, gender=gender, def_love=def_love,
                         ideal_lover=ideal_lover)  # make person object based on data
                 #still need to add lovers
                 addAnother = 1
                 x = 8
+
                 while addAnother == 1:
                     loverName = row[x]
                     #loverGender = row[x+1]
@@ -124,6 +130,7 @@ class Model:
                         venus = row[x+6]
                         mars = row[x+7]
                         #zodiac sign things
+                        
                     attractiveness = row[x+10]
                     chemistry = row[x+11]
                     sex = row[x+12]
@@ -159,9 +166,12 @@ class Model:
                     x = x + 19
                     
                 pList.append(p)
+
             else:
                 firstLine = False
+
         tsv_file.close()
+
         return pList
 
     def train(self):
