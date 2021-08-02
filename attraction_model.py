@@ -26,7 +26,8 @@ class Attraction: # TODO: OOP.
         self.pd.options.display.max_seq_items = 1000
         # self.cfd_df_raw = pd.read_csv("CFD_Version_203/metadata.csv").head()
         self.cfd_df_raw = pd.read_csv(os.path.join("CFD_Version_203", "metadata.csv")).head()
-
+        self.df['exact_file'] = os.path.join("CFD_Version_203", "CFD_203_Images", df["folder"], df['file'])
+        self.df['pixels'] = df['exact_file'].apply(retrievePixels)
     def getFileNames(self):
         files = []
         file_count = 0
@@ -38,7 +39,10 @@ class Attraction: # TODO: OOP.
                 if file.endswith(('.jpg', '.jpeg', '.png')):
                     files.append(file)
         return files
-
+    def retrievePixels(self, path):
+        img = image.load_img(path, grayscale=False, target_size=(224, 224))
+        x = image.img_to_array(img).reshape(1, -1)[0]
+        return x
 
 
 target = 'Attractive'
@@ -169,53 +173,56 @@ from keras.layers import Dense, Activation, Dropout, Flatten, Input, Convolution
 from keras.layers import Conv2D, AveragePooling2D
 from keras.models import Model, Sequential
 #VGG-Face model
-base_model = Sequential()
-base_model.add(ZeroPadding2D((1,1),input_shape=(224,224, 3)))
-base_model.add(Convolution2D(64, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(64, (3, 3), activation='relu'))
-base_model.add(MaxPooling2D((2,2), strides=(2,2)))
 
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(128, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(128, (3, 3), activation='relu'))
-base_model.add(MaxPooling2D((2,2), strides=(2,2)))
-
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(256, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(256, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(256, (3, 3), activation='relu'))
-base_model.add(MaxPooling2D((2,2), strides=(2,2)))
-
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(512, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(512, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(512, (3, 3), activation='relu'))
-base_model.add(MaxPooling2D((2,2), strides=(2,2)))
-
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(512, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(512, (3, 3), activation='relu'))
-base_model.add(ZeroPadding2D((1,1)))
-base_model.add(Convolution2D(512, (3, 3), activation='relu'))
-base_model.add(MaxPooling2D((2,2), strides=(2,2)))
-
-base_model.add(Convolution2D(4096, (7, 7), activation='relu'))
-base_model.add(Dropout(0.5))
-base_model.add(Convolution2D(4096, (1, 1), activation='relu'))
-base_model.add(Dropout(0.5))
-base_model.add(Convolution2D(2622, (1, 1)))
-base_model.add(Flatten())
-base_model.add(Activation('softmax'))
-
-#pre-trained weights are from here:https://drive.google.com/file/d/1CPSeum3HpopfomUEK1gybeuIVoeJT_Eo/view?usp=sharing
-base_model.load_weights('vgg_face_weights.h5')
+class BaseModel:
+    def __init__(self):
+        self.base_model = Sequential()
+        self.base_model.add(ZeroPadding2D((1,1),input_shape=(224,224, 3)))
+        self.base_model.add(Convolution2D(64, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(64, (3, 3), activation='relu'))
+        self.base_model.add(MaxPooling2D((2,2), strides=(2,2)))
+        
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(128, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(128, (3, 3), activation='relu'))
+        self.base_model.add(MaxPooling2D((2,2), strides=(2,2)))
+    
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(256, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(256, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(256, (3, 3), activation='relu'))
+        self.base_model.add(MaxPooling2D((2,2), strides=(2,2)))
+        
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(512, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(512, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(512, (3, 3), activation='relu'))
+        self.base_model.add(MaxPooling2D((2,2), strides=(2,2)))
+        
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(512, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(512, (3, 3), activation='relu'))
+        self.base_model.add(ZeroPadding2D((1,1)))
+        self.base_model.add(Convolution2D(512, (3, 3), activation='relu'))
+        self.base_model.add(MaxPooling2D((2,2), strides=(2,2)))
+        
+        self.base_model.add(Convolution2D(4096, (7, 7), activation='relu'))
+        self.base_model.add(Dropout(0.5))
+        self.base_model.add(Convolution2D(4096, (1, 1), activation='relu'))
+        self.base_model.add(Dropout(0.5))
+        self.base_model.add(Convolution2D(2622, (1, 1)))
+        self.base_model.add(Flatten())
+        self.base_model.add(Activation('softmax'))
+    
+    #pre-trained weights are from here:https://drive.google.com/file/d/1CPSeum3HpopfomUEK1gybeuIVoeJT_Eo/view?usp=sharing
+        self.base_model.load_weights('vgg_face_weights.h5')
 
 #TRANSFER LEARNING
 
