@@ -18,7 +18,7 @@ from Lover import Lover
 # Person(name, *, birthday=None, birthplace='nyc', gender=None,
 #	sun=None, moon=None, mercury=None, venus=None, mars=None,
 #	def_love=None, ideal_lover=None, lovers=[])
-
+import attraction_model
 
 class Model:
     """
@@ -175,7 +175,13 @@ class Model:
         return pList
 
     def train(self):
-        pass
+        attractiveness_model.compile(loss='mean_squared_error', optimizer=keras.optimizers.Adam())
+ 
+        checkpointer = ModelCheckpoint(filepath='attractiveness.hdf5', monitor = "val_loss", verbose=1, save_best_only=True, mode = 'auto')
+ 
+        earlyStop = EarlyStopping(monitor='val_loss', patience=50)
+ 
+        score = attractiveness_model.fit(train_x, train_y, epochs=5000, validation_data=(val_x, val_y), callbacks=[checkpointer, earlyStop])
 
     def run(self):
         pass
