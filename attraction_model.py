@@ -28,6 +28,7 @@ class Attraction: # TODO: OOP.
         self.cfd_df_raw = pd.read_csv(os.path.join("CFD_Version_203", "metadata.csv")).head()
         self.df['exact_file'] = os.path.join("CFD_Version_203", "CFD_203_Images", df["folder"], df['file'])
         self.df['pixels'] = df['exact_file'].apply(retrievePixels)
+
     def getFileNames(self):
         files = []
         file_count = 0
@@ -39,6 +40,7 @@ class Attraction: # TODO: OOP.
                 if file.endswith(('.jpg', '.jpeg', '.png')):
                     files.append(file)
         return files
+        
     def retrievePixels(self, path):
         img = image.load_img(path, grayscale=False, target_size=(224, 224))
         x = image.img_to_array(img).reshape(1, -1)[0]

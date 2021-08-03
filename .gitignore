@@ -5,5 +5,8 @@
 **/__pycache__
 
 # Dataset files
-CFD Version 3.0/*
+CFD_Version_3/*
 responses.tsv
+
+# Weights
+vgg_face_weights.h5

@@ -12,7 +12,6 @@ script to rturn each person object and read in .tsv file
 import os
 import csv
 
-from config import Config
 from Person import Person
 from Lover import Lover
 # Person(name, *, birthday=None, birthplace='nyc', gender=None,
@@ -176,11 +175,11 @@ class Model:
 
     def train(self):
         attractiveness_model.compile(loss='mean_squared_error', optimizer=keras.optimizers.Adam())
- 
+
         checkpointer = ModelCheckpoint(filepath='attractiveness.hdf5', monitor = "val_loss", verbose=1, save_best_only=True, mode = 'auto')
- 
+
         earlyStop = EarlyStopping(monitor='val_loss', patience=50)
- 
+
         score = attractiveness_model.fit(train_x, train_y, epochs=5000, validation_data=(val_x, val_y), callbacks=[checkpointer, earlyStop])
 
     def run(self):
