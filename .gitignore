@@ -4,5 +4,9 @@
 # Python's cache
 **/__pycache__
 
-# responses.tsv
+# Dataset files
+CFD_Version_3/*
 responses.tsv
+
+# Weights
+vgg_face_weights.h5
