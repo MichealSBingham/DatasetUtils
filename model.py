@@ -23,7 +23,7 @@ class Attraction:
     def __init__(self, rawDataPath, target = 'Attractive'):
         self.rawData = pd.read_csv(rawDataPath)
 
-        self.target = target # Attractive or Babyface
+        self.target = target # Attractive or Babyface, set during instantiation
         self.cfd_instances = []
         self.df = pd.DataFrame()
         self.features = []
@@ -45,7 +45,7 @@ class Attraction:
         pd.options.display.max_rows = 1000
         pd.options.display.max_seq_items = 1000
 
-    def getFileNames(self):
+    def getFileNames(self, target):
         files = []
         file_count = 0
         path = os.path.join("CFD_Version_3", "Images", self.target)
@@ -79,11 +79,11 @@ class Attraction:
         return x
 
     def makeDF(self):
-        self.rawData["files"] = self.rawData.Target.apply(att.getFileNames)
+        self.rawData["files"] = self.rawData.Target.apply(self.getFileNames)
 
         for index, instance in self.rawData.iterrows():
             folder = instance.Target
-            score = instance[target]
+            score = instance[self.target]
             for file in instance.files:
                 tmp_instance = []
                 #tmp_instance.append((target, file, score))
@@ -92,14 +92,15 @@ class Attraction:
                 tmp_instance.append(score)
                 self.cfd_instances.append(tmp_instance)
 
-        self.df['emotion'] = self.df.file.apply(findEmotion)
-        self.df['race'] = self.df.file.apply(findRace)
-        self.df['gender'] = self.df.file.apply(findGender)
-
         self.df = pd.DataFrame(self.cfd_instances, columns = ["folder", "file", "score"])
-        self.df['file'] = os.path.join("CFD_Version_3", "Images", self.df["folder"], self.df['file'])
 
-        self.df['pixels'] = self.df['file'].progress_apply(retrievePixels)
+        self.df['emotion'] = self.df.file.apply(self.findEmotion)
+        self.df['race'] = self.df.file.apply(self.findRace)
+        self.df['gender'] = self.df.file.apply(self.findGender)
+
+        self.df['file'] = "CFD_Version_3" + os.path.sep + "Images" + os.path.sep + self.df["folder"] + os.path.sep + self.df['file']
+
+        self.df['pixels'] = self.df['file'].progress_apply(self.retrievePixels)
 
     def analyse(self):
         for index, instance in self.df[(self.df.race == 'W') #A: Asian, B: Black, L: Latino, W: White]
