@@ -245,6 +245,7 @@ attractiveness_model = Model(inputs=base_model.input, outputs=base_model_output)
 
 #sgd = keras.optimizers.SGD(lr=0.01, decay=1e-6, momentum=0.9)
 #attractiveness_model.compile(loss='mean_squared_error', optimizer=sgd)
+###thjis part moved
 
 attractiveness_model.compile(loss='mean_squared_error', optimizer=keras.optimizers.Adam())
 checkpointer = ModelCheckpoint(
